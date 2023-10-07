@@ -1,5 +1,8 @@
-{ options, config, lib, pkgs, ... }:
+{ options, config, pkgs, ... }:
+
+
 {
+
     programs.firefox = {
       enable = true;
       profiles = {
@@ -8,14 +11,52 @@
           name = "default";
           isDefault = true;
           settings = {
-            "browser.startup.homepage" = "https://searx.aicampground.com";
-            "browser.search.defaultenginename" = "Searx";
-            "browser.search.order.1" = "Searx";
+            "browser.startup.homepage" = "https://search.notrustverify.ch/";
+            "browser.search.defaultenginename" = "Whoogle";
+            "browser.search.order.1" = "Whoogle";
+            
           };
+
+
+   settings = {
+        "browser.disableResetPrompt" = true;
+        "browser.download.panel.shown" = true;
+        "browser.download.useDownloadDir" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+        "browser.shell.checkDefaultBrowser" = false;
+        "browser.shell.defaultBrowserCheckCount" = 1;
+        "dom.security.https_only_mode" = true;
+        "identity.fxaccounts.enabled" = false;
+        "privacy.trackingprotection.enabled" = true;
+        "layout.frame_rate" = 144;
+        "generate.smoothScroll.msdPhysics.enabled" = true;
+        "mousewheel.min_line_scroll_amount" = 30;
+        "privacy.trackingprotection.fingerprinting.enabled" = true;
+        "geo.enabled" = false;
+        "media.peerconnection.enabled " = false;
+        "privacy.trackingprotection.cryptomining.enabled" = true;
+        "privacy.firstparty.isolate" = true;
+        "media.navigator.enabled" = false;
+        "network.cookie.cookieBehavior" = 3;
+        "network.cookie.lifetimePolicy" = 2;
+        "network.dns.disablePrefetch" = true;
+        "webgl.disabled" = true;
+        "network.prefetch-next" = false;
+        "dom.event.clipboardevents.enabled" = false;
+        "media.eme.enabled" = false;
+        "browser.ping-centre.telemetry" = false;
+        "extensions.pocket.enabled" = false;
+        "signon.rememberSignons" = false;
+        "beacon.enabled" = false;
+        "browser.send_pings" = false;
+        "network.http.referer.XOriginPolicy" = 1;
+        "network.http.referer.XOriginTrimmingPolicy" = 2;
+        "browser.sessionstore.privacy_level" = 2;
+      };
           search = {
             force = true;
-            default = "Searx";
-            order = [ "Searx" "Google" ];
+            default = "Whoogle";
+            order = [ "Whoogle" "Google" ];
             engines = {
               "Nix Packages" = {
                 urls = [{
@@ -34,36 +75,19 @@
                 updateInterval = 24 * 60 * 60 * 1000; # every day
                 definedAliases = [ "@nw" ];
               };
-              "Searx" = {
-                urls = [{ template = "https://searx.aicampground.com/?q={searchTerms}"; }];
+              "Whoogle" = {
+                urls = [{ template = "https://search.notrustverify.ch/?q={searchTerms}"; }];
                 iconUpdateURL = "https://nixos.wiki/favicon.png";
                 updateInterval = 24 * 60 * 60 * 1000; # every day
-                definedAliases = [ "@searx" ];
+                definedAliases = [ "@whoogle" ];
               };
               "Bing".metaData.hidden = true;
               "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
             };
           };
-          extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-            ublock-origin
-            darkreader
-            
-          ];
+    
         };
       };
-    # # TODO: Add things to exploade cac certs and install them into firefox here
-    # campground.services.cac.enable = mkIf cfg.cac true;
   };
+
 }
-
-# TODO: Read this and do something with it
-# https://github.com/NixOS/nixpkgs/issues/171978
-# Firefox needs to be convinced to use p11-kit-proxy by running a command like this:
-#
-# modutil -add p11-kit-proxy -libfile ${p11-kit}/lib/p11-kit-proxy.so -dbdir ~/.mozilla/firefox/*.default
-# I was also able to accomplish the same by making use of extraPolciies when overriding the firefox package:
-#
-#         extraPolicies = {
-#           SecurityDevices.p11-kit-proxy = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
-#         };
-

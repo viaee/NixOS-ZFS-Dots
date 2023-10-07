@@ -137,7 +137,6 @@ programs.hyprland.enable = true;
     description = "vi";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
-      librewolf
       vim
       btop
       kitty
@@ -157,7 +156,6 @@ programs.hyprland.enable = true;
       git
       wget 
       imagemagick
-      nerdfonts
       dunst
       wpgtk
       geany
@@ -170,13 +168,11 @@ programs.hyprland.enable = true;
     ];
   };
   
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
-    };
-  };
-
-
+fonts.packages = with pkgs; [
+	nerdfonts
+	noto-fonts
+	noto-fonts-emoji
+];
 #------------------------------------------------------------------
 
 # Environment Variables

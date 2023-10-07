@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs,... }:
 
 {
   imports = [
@@ -7,7 +7,7 @@
     ./programs/hypr/hyprland.nix
     ./programs/kitty/kitty.nix
     ./programs/rofi/rofi.nix
-    /programs/firefox/firefox.nix
+    ./programs/firefox/firefox.nix
     # ./programs/neofetch/config.nix
   ];
 }

@@ -10,8 +10,8 @@
 # ----------------------------------------------------- 
 
 # Select wallpaper
-selected=$(ls -1 ~/Pictures/Wallpapers/ | grep "jpg" | rofi -dmenu -p "Wallpapers")
 
+selected=$(ls -1  ~/Pictures/Wallpapers/ | grep 'jpg\|png\|gif'| rofi -dmenu -p "Wallpapers")
 if [ "$selected" ]; then
 
     echo "Changing theme..."
