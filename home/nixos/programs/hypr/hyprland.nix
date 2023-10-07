@@ -105,7 +105,7 @@
 
     #bind = $mainMod, RETURN, exec, cool-retro-term-zsh
     bind = $mainMod, RETURN, exec, kitty
-    bind = $mainMod, A, exec, librewolf
+    bind = $mainMod, A, exec, firefox
     bind = $mainMod, B, exec, waybar
     bind = $mainMod SHIFT, B, exec, pkill waybar
     bind = $mainMod SHIFT, C, killactive,

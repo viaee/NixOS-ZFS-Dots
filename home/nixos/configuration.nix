@@ -16,6 +16,12 @@
   boot.loader.grub.efiInstallAsRemovable = true;
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.useOSProber = true;
+    boot.kernelParams = [
+    "quiet"
+    "splash"
+    "amd_iommu=on"
+    "iommu=pt"
+  ];
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.requestEncryptionCredentials = true;
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
@@ -135,7 +141,7 @@ programs.hyprland.enable = true;
   users.users.vi = {
     isNormalUser = true;
     description = "vi";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd"];
     packages = with pkgs; [
       vim
       btop
@@ -165,9 +171,13 @@ programs.hyprland.enable = true;
       wl-clipboard
       xdg-user-dirs
       neovim
+      virt-manager
     ];
   };
   
+virtualisation.libvirtd.enable = true;
+programs.dconf.enable = true;
+
 fonts.packages = with pkgs; [
 	nerdfonts
 	noto-fonts

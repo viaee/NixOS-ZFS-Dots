@@ -8,6 +8,7 @@
     ./programs/kitty/kitty.nix
     ./programs/rofi/rofi.nix
     ./programs/firefox/firefox.nix
+    # ./programs/waybar/default.nix
     # ./programs/neofetch/config.nix
   ];
 }

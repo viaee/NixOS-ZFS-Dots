@@ -11,9 +11,9 @@
           name = "default";
           isDefault = true;
           settings = {
-            "browser.startup.homepage" = "https://search.notrustverify.ch/";
-            "browser.search.defaultenginename" = "Whoogle";
-            "browser.search.order.1" = "Whoogle";
+            "browser.startup.homepage" = "https://duckduckgo.com/";
+            "browser.search.defaultenginename" = "duckduckgo";
+            "browser.search.order.1" = "duckduckgo";
             
           };
 
@@ -55,8 +55,8 @@
       };
           search = {
             force = true;
-            default = "Whoogle";
-            order = [ "Whoogle" "Google" ];
+            default = "duckduckgo";
+            order = [ "duckduckgo" "Google" ];
             engines = {
               "Nix Packages" = {
                 urls = [{
@@ -76,10 +76,10 @@
                 definedAliases = [ "@nw" ];
               };
               "Whoogle" = {
-                urls = [{ template = "https://search.notrustverify.ch/search={searchTerms}"; }];
+                urls = [{ template = "https://duckduckgo.com/search={searchTerms}"; }];
                 iconUpdateURL = "https://nixos.wiki/favicon.png";
                 updateInterval = 24 * 60 * 60 * 1000; # every day
-                definedAliases = [ "@whoogle" ];
+                definedAliases = [ "@duckduckgo" ];
               };
               "Bing".metaData.hidden = true;
               "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias

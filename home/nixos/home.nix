@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, ... }:
 {
 
 imports = [
@@ -7,6 +7,7 @@ imports = [
   home.username = "vi";
   home.homeDirectory = "/home/vi";
   home.stateVersion = "23.05"; # Please read the comment before changing.
+ #  home-manager.users.vi.home.services = true;
   home.sessionVariables = {
     EDITOR = "nvim";
   };
@@ -22,4 +23,5 @@ gtk = {
       package = pkgs.adw-gtk3;
     };
 };
+
 }
