@@ -76,7 +76,7 @@
                 definedAliases = [ "@nw" ];
               };
               "Whoogle" = {
-                urls = [{ template = "https://search.notrustverify.ch/?q={searchTerms}"; }];
+                urls = [{ template = "https://search.notrustverify.ch/search={searchTerms}"; }];
                 iconUpdateURL = "https://nixos.wiki/favicon.png";
                 updateInterval = 24 * 60 * 60 * 1000; # every day
                 definedAliases = [ "@whoogle" ];
