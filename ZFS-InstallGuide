@@ -1,0 +1,137 @@
+This a personal install guide for NixOS with ZFS / ZFS Native Encryption / Erase Your Darlings.
+
+Hello! Welcome to a guide on how to install NixOS!
+This guide was made because I could quite find any good guides on installing NixOS with the following feautures:
+  - Disk Encryption
+  - ZFS
+  - Erase Your Darlings
+This guide will help you in accomplishing all three on your main drive. Other drives you may have to do and figure out yourself as I do not have any desire to have these features on other drives.
+
+This guide takes steps from both https://github.com/mcdonc/p51-thinkpad-nixos/tree/zfsvid and https://grahamc.com/blog/erase-your-darlings/ (Thanks to both)
+
+Prerequisites
+  - A PC
+  - Another tab / phone open to follow
+That's it! Now, the guide
+
+
+-  Download minimal NixOS image from the official NixOS website - https://nixos.org/download.html
+-  Boot into ISO on your USB drive and or VM
+-  Once booted, sudo su just to make the process a little easier
+
+We will start with partitioning using fdisk. I will only layout the commands to be typed. Minus the (-)
+
+- fdisk /dev/vda  (replace vda with your drive, look for drive with lsblk command)
+-  g
+-  n
+-  enter
+-  enter
+-  +2G
+-  t
+-  1
+-  n
+-  enter
+-  enter
+-  enter
+-  w
+
+No swap partition will be made but you can always add one yourself.
+
+Create boot volume
+
+-  mkfs.fat -F 32 /dev/vda1  (replace vda with disk of choice)
+-  fatlabel /dev/vda1 NIXBOOT
+
+Create the zpool (long command)
+
+-  zpool create -f \
+  -o altroot="/mnt" \ 
+  -o ashift=12 \ 
+  -o autotrim=on \
+  -O compression=lz4 \
+  -O acltype=posixacl \
+  -O xattr=sa \
+  -O relatime=on \
+  -O normalization=formD \
+  -O dnodesize=auto \
+  -O sync=disabled \
+  -O encryption=aes-256-gcm \
+  -O keylocation=prompt \
+  -O keyformat=passphrase \
+  -O mountpoint=none \
+  rpool
+  /dev/vda2  (replace vda2 with disk of choice)
+
+Next part will setup eyd (erase your darlings)
+
+-  zfs create -p -o mountpoint=legacy rpool/local/root
+-  zfs snapshot rpool/local/root@blank
+-  mount -t zfs rpool/local/root /mnt
+
+-  mkdir /mnt/boot
+-  mount /dev/vda1 /mnt/boot
+
+-  zfs create -p -o mountpoint=legacy rpool/local/nix
+-  mkdir /mnt/nix
+-  mount -t zfs rpool/local/nix /mnt/nix
+
+-  zfs create -p -o mountpoint=legacy rpool/safe/home
+-  mkdir /mnt/home
+-  mount -t zfs rpool/safe/home /mnt/home
+
+-  zfs create -p -o mountpoint=legacy rpool/safe/persist
+-  mkdir /mnt/persist
+-  mount -t zfs rpool/safe/persist /mnt/persist
+
+Partitioning is done, now time for installation
+
+-  nixos-generate-config --root /mnt
+-  vim /mnt/etc/nixos/configuration.nix
+
+Things to add and change are as follows...
+
+-----
+
+  boot.loader.grub.enable = true;
+  boot.loader.grub.devices = [ "nodev" ];
+  boot.loader.grub.efiInstallAsRemovable = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.useOSProber = true;
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.requestEncryptionCredentials = true;
+  boot.zfs.devNodes = "/dev/disk/by-partuuid" (VERY IMPORTANT STEP. DOES NOT WORK IF NOT SET!!!! for me. mileage may vary)
+  services.zfs.autoScrub.enable = true;
+
+  networking.hostName = "nixxy"; # Define your hostname.
+  # Pick only one of the below networking options.
+  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.hostId = "d13e0d41";
+
+  users.users.vi = {
+    isNormalUser = true;
+    initialPassword = "password123";
+    extraGroups = [ "wheel" ];
+    packages = with pkgs; [
+      vim 
+      git
+      wget
+    ];
+  };
+
+ boot.initrd.postDeviceCommands = ''
+    zfs rollback -r rpool/local/root@blank
+  '';
+
+
+-----
+
+No need to change hardware-configuration.nix
+
+- nixos-install
+- reboot
+
+That is it! Now, enjoy your very modern and nice NixOS install! I hope you enjoy and find a reason and love for Nix that many people share! 
+
+I am always open to suggestions, if any problems are seen, please tell me. Thank you!
+
