@@ -11,7 +11,7 @@
           name = "default";
           isDefault = true;
           settings = {
-            "browser.startup.homepage" = "https://duckduckgo.com/";
+            "browser.startup.homepage" = "https://prettycoffee.github.io/fluidity/";
             "browser.search.defaultenginename" = "duckduckgo";
             "browser.search.order.1" = "duckduckgo";
             
