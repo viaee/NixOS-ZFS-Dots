@@ -27,7 +27,27 @@
   boot.zfs.devNodes = "/dev/disk/by-partuuid";
   services.zfs.autoScrub.enable = true; 
 
+
+#------------------------------------------------------------------
+
+# greetD
+ services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        user = "greeter";
+      };
+    };
+  };
+
+
+#------------------------------------------------------------------
+
+# HostID (Needed for ZFS)
   networking.hostId = "d13e0d41";
+
+
 #------------------------------------------------------------------
 
 # Hostname / System Settings
@@ -62,15 +82,8 @@
  services = {
     xserver = {
       enable = false;
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
       };
     };
-    dbus.enable = true;
-    gvfs.enable = true;
-    tumbler.enable = true;
-  };
 
 
 #------------------------------------------------------------------
@@ -231,8 +244,8 @@ users.defaultUserShell = pkgs.zsh;
 # Automatic Garbage Collection
 nix.gc = {
                 automatic = true;
-                dates = "weekly";
-                options = "--delete-older-than 4d";
+                dates = "daily";
+                options = "--delete-older-than +5 ";
         };
 
 
